@@ -27,3 +27,7 @@ class Post(db.Model):
 
     def __repr__(self):
         return f'<Post {self.body}>'
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
