@@ -1,3 +1,4 @@
-# Welcome to Microblog!
+# Welcome to 160chars!
 
-This is an example application featured in my [Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world). See the tutorial for instructions on how to work with it.
+This is an ongoing work to create a simple Twitter-like web app.
+
