@@ -64,9 +64,9 @@ def register():
 @app.route('/user/<username>')
 @login_required
 def user(username):
-    user = User.query.filter_by(username=username)first_or_404()
+    user = User.query.filter_by(username=username).first_or_404()
     posts = [
-        {'author': user, 'body': 'Testing #1'}
+        {'author': user, 'body': 'Testing #1'},
         {'author': user, 'body': 'Testing #1'}
     ]
     return render_template ('user.html', user=user, posts=posts)
