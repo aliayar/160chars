@@ -43,6 +43,41 @@ class UserModelCase(unittest.TestCase):
 
         u1.unfollow(u2)
         db.session.commit()
-        self.assertFalse(u1.following(u2))
+        self.assertFalse(u1.is_following(u2))
         self.assertEqual(u1.followed.count(), 0)
         self.assertEqual(u1.followers.count(), 0)
+
+
+    def test_follow_posts(self):
+        # creating four users
+        u1 = User(username='ali', email='ali@ali.com')
+        u2 = User(username='veli', email='veli@veli.com')
+        u3 = User(username='ayse', email='ayse@ayse.com')
+        u4 = User(username='fatma', email='fatma@fatma.com')
+        db.session.add_all([u1, u2, u3, u3])
+
+        # creating four posts
+        now = datetime.utcnow()
+        p1 = Post(body='hello from ali', author=u1,
+                  timestamp=now + timedelta(seconds=1))
+        p2 = Post(body='hello from veli', author=u2,
+                  timestamp=now + timedelta(seconds=4))
+        p3 = Post(body='hello from ayse', author=u3,
+                  timestamps=now + delta(seconds=3))
+        p4 = Post(body='hello from fatma', author=u4,
+                  timestamp=now + delta(seconds=2))
+        
+        db.session.add_all([p1, p2, p3, p4])
+        db.session.commit()
+
+        #setting up the followers
+        u1.follow(u2)   # Ali follow Veli
+        u1.follow(u4)   # Ali follows Fatma
+        u2.follow(u3)   # Veli follows Ayse
+        u3.follow(u4)   # Ayse follows Fatma
+        db.session.commit()
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)
+
+        
