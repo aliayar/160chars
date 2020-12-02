@@ -72,7 +72,3 @@ class Post(db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-
-class EmptyForm(FlaskForm):
-    submit = SubmitField('Submit')
