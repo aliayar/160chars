@@ -28,6 +28,7 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different e-mail address')
 
+
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     about_me = StringField('About Me', validators=[Length(min=5, max=160)])
@@ -42,6 +43,12 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
                 raise ValidationError('Please use a different username')
+
+
+class PostForm(FlaskForm):
+    post = TextAreaField('Write what you want', validators=[
+        DataRequired(), Length(min=1, max=160)])
+    submit = SubmitField('Submit')
 
 
 class EmptyForm(FlaskForm):
