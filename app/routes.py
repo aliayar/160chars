@@ -76,7 +76,8 @@ def user(username):
         {'author': user, 'body': 'Testing #1'},
         {'author': user, 'body': 'Testing #1'}
     ]
-    return render_template ('user.html', user=user, posts=posts)
+    form = EmptyForm()
+    return render_template ('user.html', user=user, posts=posts, form=form)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -96,6 +97,7 @@ def edit_profile():
 
 
 @app.route('/follow/<username>', methods=['POST'])
+@login_required
 def follow(username):
     form = EmptyForm()
     if form.validate_on_submit():
@@ -114,6 +116,7 @@ def follow(username):
         return redirect(url_for('index'))
 
 @app.route('/unfollow/<username>', methods=['POST'])
+@login_required
 def unfollow(username):
     if form.validate_on_submit:
         user = User.query.filter_by(username=username).first()
