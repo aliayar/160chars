@@ -111,13 +111,14 @@ def follow(username):
         current_user.follow(user)
         db.session.commit()
         flash('You are following {}.'.format(username))
-        return redirect(url_for('username', username))
+        return redirect(url_for('user', username=username))
     else:
         return redirect(url_for('index'))
 
 @app.route('/unfollow/<username>', methods=['POST'])
 @login_required
 def unfollow(username):
+    form = EmptyForm()
     if form.validate_on_submit:
         user = User.query.filter_by(username=username).first()
         if user is None:
@@ -129,7 +130,7 @@ def unfollow(username):
         else:
            current_user.unfollow(user)
            db.session.commit()
-           flash('You are now following {}!'.format(username))
+           flash('You have unfollowed {}!'.format(username))
            return redirect(url_for('user', username=username))
     else:
         return redirect(url_for('index'))
