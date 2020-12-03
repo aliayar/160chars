@@ -26,6 +26,11 @@ def index():
     posts = current_user.followed_posts().all()
     return render_template('index.html', title='Home', form=form, posts=posts)
 
+@app.route('/explore')
+def explore():
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('index.html', posts=posts, title='Explore')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
