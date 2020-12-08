@@ -171,6 +171,8 @@ def reset_password_request():
             send_password_reset_email(user)
             flash('Check your email for the instructions to reset your password')
             return redirect(url_for('login'))
+        else:
+            flash('That e-mail is not registered!')    
     return render_template('reset_password_request.html',
                             title='Reset Password', form=form)
 
