@@ -56,23 +56,14 @@
     </div>
   </nav>
 {% endblock %}
-{% block content %}
-        {{ render_messages }}
-        {% with messages = flask.get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-{% block app_content %} {% endblock %}
+    <main class="container">
+        {{ render_messages(container=False, dismissible=True) }}
+        {% block content %}{% endblock %}
+    </main>
 
     {% block scripts %}
         <!--Optional JS-->
         {{ bootstrap.load_js() }}
     {% endblock %}
-{% endblock %}
     </body>
 </html>
