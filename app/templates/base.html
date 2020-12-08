@@ -1,4 +1,4 @@
-{% from 'bootstrap/utils.html' import render_messages %}
+{% from 'bootstrap/utils.html' import render_messages, render_static %}
 <!doctype html>
 <html lang="en">
     <head>
@@ -6,9 +6,11 @@
             <!--Required meta tags-->
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            
         {% block styles %}
             <!--Bootstrap CSS-->
             {{ bootstrap.load_css() }}
+            {{ render_static('css', 'theme.css', local=True) }}
         {% endblock %}
             {% if title %}
             <title>{{ title }} - Microblog</title>
@@ -17,46 +19,49 @@
             {% endif %}
         {% endblock %}
     </head>
-    <body>
-{% block navbar %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{{ url_for('index') }}">160Chars</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+<body>
+    {% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbar1">
+        <a class="navbar-brand" href="{{ url_for('index') }}">160Chars</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
   
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('explore') }}">Explore</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav mr-sm-2">
-        {% if current_user.is_anonymous %}
-        <li class="nav-item active">
-        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-        </li>
-        {% else %}
-        <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">Profile</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-        </li>
-        {% endif %}
-      </ul>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('explore') }}">Explore</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav mr-sm-2">
+                {% if current_user.is_anonymous %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">Profile</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                {% endif %}
+                </ul>
       
-      <form class="form-inline my-2 my-lg-2">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
-    </div>
-  </nav>
+                <form class="form-inline my-2 my-lg-2">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+    </nav>
 {% endblock %}
-    <main class="container">
+    <main class="container-fluid pt-5">
         {{ render_messages(container=False, dismissible=True) }}
         {% block content %}{% endblock %}
     </main>
