@@ -62,7 +62,8 @@
     </nav>
 {% endblock %}
     <main class="container-fluid pt-5">
-        {{ render_messages(container=False, dismissible=True) }}
+        {{ render_messages(container=False, dismissible=True,
+            dismiss_animate=True) }}
         {% block content %}{% endblock %}
     </main>
 
