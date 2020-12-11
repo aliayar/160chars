@@ -1,5 +1,7 @@
+import logging
+from logging.handlers import SMTPHandler, RotatingFileHandler
+import os
 from flask import Flask, request, current_app
-from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -7,24 +9,19 @@ from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from config import Config
-import logging
-import os
-from logging.handlers import SMTPHandler, RotatingFileHandler
 
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
-app.config.from_object(Config)
-"""This should be same as login view/route
- so that flask-login knows where login view is."""
 login.login_view = 'auth.login'
-login.login_message = ('Please log in to access this page.')
+login.login_message = 'Please log in to access this page.'
 mail = Mail()
 bootstrap = Bootstrap()
 moment = Moment()
 
+
 def create_app(config_class=Config):
-    app= Flask(__name__)
+    app = Flask(__name__)
     app.config.from_object(config_class)
 
     db.init_app(app)
@@ -34,8 +31,8 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     moment.init_app(app)
 
-    from app.errors import bp as errors.bp
-    app.register_blueprint(errors.bp)
+    from app.errors import bp as errors_bp
+    app.register_blueprint(errors_bp)
 
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
@@ -45,7 +42,7 @@ def create_app(config_class=Config):
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:
-            auth=None
+            auth = None
             if app.config['MAIL_USERNAME'] or app.config['MAIL_PASSWORD']:
                 auth = (app.config['MAIL_USERNAME'],
                         app.config['MAIL_PASSWORD'])
@@ -55,23 +52,26 @@ def create_app(config_class=Config):
             mail_handler = SMTPHandler(
                 mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
                 fromaddr='no-reply@' + app.config['MAIL_SERVER'],
-                toaddrs=app.config['ADMINS'], subject='Production web failure',
+                toaddrs=app.config['ADMINS'], subject='Microblog Failure',
                 credentials=auth, secure=secure)
             mail_handler.setLevel(logging.ERROR)
             app.logger.addHandler(mail_handler)
 
-            if not os.path.exists('logs'):
-                os.mkdir('logs')
-            file_handler = RotatingFileHandler('logs/microblog.log', maxBytes=20480,
-                                                backupCount=10)
-            file_handler.setFormatter(logging.Formatter(
-                '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
-            file_handler.setLevel(logging.INFO)
-            app.logger.addHandler(file_handler)
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
+        file_handler = RotatingFileHandler('logs/microblog.log',
+                                           maxBytes=10240, backupCount=10)
+        file_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s '
+            '[in %(pathname)s:%(lineno)d]'))
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
 
-            app.logger.setLevel(logging.INFO)
-            app.logger.info('Microblog logs')
-        
-        return app
+        app.logger.setLevel(logging.INFO)
+        app.logger.info('Microblog startup')
+
+    return app
+
+
 
 from app import models

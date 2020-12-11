@@ -43,11 +43,11 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you have successfully registered!')
-        return redirect(url_for('auth/login'))
+        return redirect(url_for('auth.login'))
     return render_template('auth/register.html', title='Register', form=form)
 
 
-@app.route('/reset_password_request', methods=['GET', 'POST'])
+@bp.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
@@ -57,7 +57,7 @@ def reset_password_request():
         if user:
             send_password_reset_email(user)
             flash('Check your email for the instructions to reset your password')
-            return redirect(url_for('auth/login'))
+            return redirect(url_for('auth.login'))
         else:
             flash('That e-mail is not registered!')    
     return render_template('auth/reset_password_request.html',
