@@ -82,6 +82,7 @@ class Post(db.Model):
     body = db.Column(db.String(160))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    __searchable__ = ['body']
 
     def __repr__(self):
         return f'<Post {self.body}>'
