@@ -53,11 +53,13 @@
                     </li>
                 {% endif %}
                 </ul>
-      
-                <form class="form-inline my-2 my-lg-2">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                {% if g.search_form %}
+                <form class="form-inline my-2 my-lg-2" method="get" action="{{ url_for('main.search') }}">
+                    <input class={{ g.search_form.q(size= 20, class='form-control mr-sm-2',
+                                    placeholder=g.search_form.q.label.text) }}
+                    >
                 </form>
+                {% endif %}
             </div>
     </nav>
 {% endblock %}
