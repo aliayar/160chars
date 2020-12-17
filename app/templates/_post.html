@@ -11,7 +11,9 @@
             </a>
             {{ moment(post.timestamp).fromNow() }}
             <p>{{ post.body }}</p>
+            {% if post.author.username == current_user.username %}
             <a href="#"><span class="badge badge-primary">Delete</span></a>
+            {% endif %}
         </td>
     </tr>
 </table>
