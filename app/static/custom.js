@@ -21,7 +21,7 @@ $(function () {
                             flask_moment_render_all();
                         }
                     );
-            }, 1000);
+            }, 100);
         },
         function(event) {
             var elem = $(event.currentTarget);
