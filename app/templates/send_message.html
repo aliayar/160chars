@@ -3,10 +3,11 @@
 
 {% block content %}
     <div>
-        <h1>{{ 'Send message to %(recipient)s', recipient=recipient  }}</h1>
+        <h1>Send a message to {{ recipient }}'s</h1>
         <div class="row">
             <div class="col-md-4">
                 {{ render_form(form) }}
             </div>
         </div>
     </div>
+{% endblock %}
