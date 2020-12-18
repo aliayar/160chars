@@ -50,8 +50,11 @@ class SearchableMixin(object):
         for obj in cls.query:
             add_to_index(cls.__tablename__, obj)
 
-db.event.listen(db.session, 'before_commit', SearchableMixin.before_commit)
-db.event.listen(db.session, 'after_commit', SearchableMixin.after_commit)
+""" two lines below are commented out
+because i don't have an active instance of elastic. Without elastic,
+POST reqs errors out despite a successful commit."""
+#db.event.listen(db.session, 'before_commit', SearchableMixin.before_commit)
+#db.event.listen(db.session, 'after_commit', SearchableMixin.after_commit)
 
 
 followers = db.Table('followers',
@@ -75,7 +78,7 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     messages_sent = db.relationship('Message',
                                         foreign_keys='Message.sender_id',
-                                        backref='author', lazy=dynamic)
+                                        backref='author', lazy='dynamic')
     messages_received = db.relationship('Message',
                                             foreign_keys='Message.recipient_id',
                                             backref='recipient', lazy='dynamic') 
@@ -154,8 +157,8 @@ def load_user(id):
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    sender_id = db.Column(db.Integer, db.ForeignKey('user_id'))
-    recipient_id = db.Column(db.Integer, db.ForeignKey('user_id'))
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     body = db.Column(db.String(160))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
