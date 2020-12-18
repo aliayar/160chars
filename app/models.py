@@ -73,6 +73,13 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+    messages_sent = db.relationship('Message',
+                                        foreign_keys='Message.sender_id,
+                                        backref='author', lazy=dynamic)
+    messages_received = db.relationship('Message',
+                                            foreign_keys='Message.recipient_id',
+                                            backref='recipient', lazy=dynamic) 
+    last_message_read_time = db.Column(db.DateTime)
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -136,3 +143,14 @@ class Post(SearchableMixin, db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user_id'))
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user_id'))
+    body = db.Column(db.String(160))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Message {self.body}'
