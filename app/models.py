@@ -74,12 +74,13 @@ class User(UserMixin, db.Model):
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     messages_sent = db.relationship('Message',
-                                        foreign_keys='Message.sender_id,
+                                        foreign_keys='Message.sender_id',
                                         backref='author', lazy=dynamic)
     messages_received = db.relationship('Message',
                                             foreign_keys='Message.recipient_id',
-                                            backref='recipient', lazy=dynamic) 
+                                            backref='recipient', lazy='dynamic') 
     last_message_read_time = db.Column(db.DateTime)
+
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -128,6 +129,12 @@ class User(UserMixin, db.Model):
         except:
             return
         return User.query.get(id)
+
+
+    def new_message(self):
+        last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
+        return Message.query.filter_by(recipients=self).filter(
+            Message.timestamp > last_read_time).count()
 
 
 class Post(SearchableMixin, db.Model):
