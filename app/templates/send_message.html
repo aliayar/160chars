@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block content %}
+    <div>
+        <h1>{{ 'Send message to %(recipient)s', recipient=recipient  }}</h1>
+        <div class="row">
+            <div class="col-md-4">
+                {{ render_form(form) }}
+            </div>
+        </div>
+    </div>
