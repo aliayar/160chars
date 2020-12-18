@@ -3,8 +3,8 @@ from flask import render_template, flash, redirect, url_for, request, \
     current_app, g
 from flask_login import current_user, login_required
 from app import db
-from app.main.forms import EditProfileForm, EmptyForm, PostForm, SearchForm
-from app.models import User, Post
+from app.main.forms import EditProfileForm, EmptyForm, PostForm, SearchForm, MessageForm
+from app.models import User, Post, Message
 from app.main import bp
 
 
@@ -148,4 +148,19 @@ def user_popup(username):
     form = EmptyForm()
     return render_template('user_popup.html', user=user, form=form)
 
+
+@bp.route('/send_message/<recipient>', methods=['GET', 'POST'])
+@login_required
+def send_message(recipient):
+    user = User.query.filter_by(username=recipient).first_or_404()
+    form = MessageForm()
+    if form.validate_on_submit():
+        msg = Message(author=current_user, recipient=user,
+                    body=form.message.data)
+        db.session.add(msg)
+        db.session.commit()
+        flash('Your message has been sent!')
+        return redirect(url_for('main.user', username=recipient))
+    return render_template('send_message.html', title='Send Message',
+                            form=form, recipient=recipient)
 
