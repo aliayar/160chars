@@ -134,9 +134,9 @@ class User(UserMixin, db.Model):
         return User.query.get(id)
 
 
-    def new_message(self):
+    def new_messages(self):
         last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
-        return Message.query.filter_by(recipients=self).filter(
+        return Message.query.filter_by(recipient=self).filter(
             Message.timestamp > last_read_time).count()
 
 
