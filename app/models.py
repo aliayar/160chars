@@ -184,4 +184,4 @@ class Notification(db.Model):
     payload_json = db.Column(db.Text)
 
     def get_data(self):
-        return json.loads(str(self.payload.json))
+        return json.loads(str(self.payload_json))
