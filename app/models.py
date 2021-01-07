@@ -3,6 +3,8 @@ from datetime import datetime
 from time import time
 import jwt
 import json
+import redis
+import rq
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -86,6 +88,7 @@ class User(UserMixin, db.Model):
     last_message_read_time = db.Column(db.DateTime)
     notifications = db.relationship('Notification', backref='user',
                                     lazy='dynamic')
+    tasks = db.relationship('Task', backref='user', lazy='dynamic')
 
 
     def __repr__(self):
