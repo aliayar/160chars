@@ -10,6 +10,8 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from config import Config
 from elasticsearch import Elasticsearch
+from redis import Redis
+import rq
 
 db = SQLAlchemy()
 migrate = Migrate()
