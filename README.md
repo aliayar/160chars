@@ -9,6 +9,11 @@
  - No check for repeated forgot password requests. This can be used as a way to SPAM users.
  - Probably many more that I am not aware of.
 
+## Stack
+
+Python, Flask, HTML, CSS and JavaScript with a bit of jQuery have been used. 
+For front-end, I have included Bootstrap-Flask for Bootstrap 4 instead of Flask-Bootstrap which is based on Bootstrap 3.
+
 ## Database
 
 An SQLite database is configured for development purposes. As SQLAlchemy and Alembic are included via Flask-SQLALchemy and Flask-Migrate, using any other database supported by SQLAlchemy can be used immediately with small configuration edits.
