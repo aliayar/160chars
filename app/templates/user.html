@@ -13,6 +13,13 @@
             <p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
             {% if user == current_user %}
             <p><a href="{{ url_for('main.edit_profile') }}">Edit your profile</a></p>
+            {% if not current_user.get_task_in_progress('export_posts') %}
+            <p>
+                <a href="{{ url_for('main.export_posts') }}">
+                    {{ 'Export your posts' }}
+                </a>
+            {% endif %}
+            </p>
             {% elif not current_user.is_following(user) %}
             <p>
                 <form action="{{ url_for('main.follow', username=user.username) }}" method="post">
